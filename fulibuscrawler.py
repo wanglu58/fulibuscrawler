@@ -5,7 +5,7 @@ import os
 import sys
 import threading
 
-# 定义爬取福利吧的任务
+# 定义爬取福利吧的函数
 def scrawler(issue_start,issue_end,page):
     for i in range(issue_start, issue_end):
         try:
