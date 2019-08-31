@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import os
 import sys
 import socket
+
 socket.setdefaulttimeout(30)
 issue_start = input("请输入爬取哪一期开始(例:2019年第1期:输入2019001)\n")
 while issue_start.isdigit() == False or issue_start=='':
@@ -38,16 +39,27 @@ for i in range(issue_start,issue_end):
         dnumber += 1
         imgs=d.find_all('img')
         for img in imgs:
+            inumber = inumber + 1
             tupian_url = img.get('src')
             print(tupian_url)
-            list_data = tupian_url.split('.')
-            houzhui = list_data[-1]
-            inumber = inumber + 1
-            count = str(i)+'-' +str(1)+'-'+ str(dnumber)+'-'+str(inumber)
-            if houzhui == 'gif':
-                downPath = lujing+'.\\%s.gif'%count
-            if houzhui == 'jpg':
-                downPath = lujing+'.\\%s.jpg' % count
+            # 从2019118期开始图片url没有后缀,故更改从请求头中获取后缀
+            # old
+            # list_data = tupian_url.split('.')
+            # houzhui = list_data[-1]
+            # inumber = inumber + 1
+            # count = str(i)+'-' +str(1)+'-'+ str(dnumber)+'-'+str(inumber)
+            # if houzhui == 'gif':
+            #     downPath = lujing+'.\\%s.gif'%count
+            # if houzhui == 'jpg':
+            #     downPath = lujing+'.\\%s.jpg' % count
+            # old
+            img_file = requests.get(tupian_url)
+            img_type = img_file.headers.get('content-type')
+            count = str(i) + '-' + str(1) + '-' + str(dnumber) + '-' + str(inumber)
+            if img_type.split('/')[-1] == 'jpeg':
+                downPath = lujing + '.\\%s.jpg' % count
+            else:
+                downPath = lujing + '.\\%s.%s' % (count,img_type.split('/')[-1])
             print('正在下载'+count+'的图片')
             try:
                 urllib.request.urlretrieve(tupian_url, downPath)
@@ -56,7 +68,7 @@ for i in range(issue_start,issue_end):
                 print('网站图片无法加载,下载失败')
             except socket.timeout as e:
                 print(e)
-                print('网站图片无法加载,下载失败')            
+                print('网站图片无法加载,下载失败')
     print('网页'+str(i)+'第一页图片已下载完成!\n')
     print('网页'+str(i)+'开始下载第二页...')
     try:
@@ -79,17 +91,28 @@ for i in range(issue_start,issue_end):
         dnumber += 1
         imgs=d.find_all('img')
         for img in imgs:
+            inumber = inumber + 1
             tupian_url = img.get('src')
             print(tupian_url)
-            list_data = tupian_url.split('.')
-            houzhui = list_data[-1]
-            inumber = inumber + 1
-            count = str(i)+'-' +str(1)+'-'+ str(dnumber)+'-'+str(inumber)
-            if houzhui == 'gif':
-                downPath = lujing+'.\\%s.gif'%count
-            if houzhui == 'jpg':
-                downPath = lujing+'.\\%s.jpg' % count
-            print('正在下载'+count+'的图片')
+            # 从2019118期开始图片url没有图片后缀,故从请求头中获取后缀
+            # old
+            # list_data = tupian_url.split('.')
+            # houzhui = list_data[-1]
+            # inumber = inumber + 1
+            # count = str(i) + '-' + str(2) + '-' + str(dnumber) + '-' + str(inumber)
+            # if houzhui == 'gif':
+            #     downPath = lujing + '.\\%s.gif' % count
+            # if houzhui == 'jpg':
+            #     downPath = lujing + '.\\%s.jpg' % count
+            # old
+            img_file = requests.get(tupian_url)
+            img_type = img_file.headers.get('content-type')
+            count = str(i) + '-' + str(2) + '-' + str(dnumber) + '-' + str(inumber)
+            if img_type.split('/')[-1] == 'jpeg':
+                downPath = lujing + '.\\%s.jpg' % count
+            else:
+                downPath = lujing + '.\\%s.%s' % (count, img_type.split('/')[-1])
+            print('正在下载' + count + '的图片')
             try:
                 urllib.request.urlretrieve(tupian_url, downPath)
             except urllib.request.URLError as err:
@@ -100,9 +123,8 @@ for i in range(issue_start,issue_end):
                 print('网站图片无法加载,下载失败')
     print('网页'+str(i)+'第二页图片已下载完成!\n')
 print('已全部下载完成!请在当前路径下查看\n')
+print('Enjoy it')
+print('Powered by Wanglu')
 key = input('按回车键退出\n')
 while key!='':
     key = input('按回车键退出\n')
-print('Enjoy it')
-print('Powered by Wanglu')
-time.sleep(3)
