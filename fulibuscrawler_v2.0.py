@@ -1,5 +1,5 @@
 import os
-import time
+import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from bs4 import BeautifulSoup
@@ -55,17 +55,17 @@ def GetPicture(route_url,picture_url):
 
 
 if __name__ == '__main__':
-    starttime = time.time()
     issue_start = input("请输入从哪一期开始爬取（例：2020年第1期：输入2020001）\n")
     while issue_start.isdigit() == False or issue_start == '':
         print('请好好输！\n')
         issue_start = input("请输入从哪一期开始爬取（例：2020年第1期：输入2020001）\n")
-    issue_end = input("请输入从哪一期结束爬取（例：2020年第58期：输入2020058）\n")
+    issue_end = input("请输入从哪一期结束爬取（例：2020年第60期：输入2020060）\n")
     while issue_end.isdigit() == False or issue_end == '' or issue_end < issue_start:
         print('请好好输！\n')
-        issue_end = input("请输入从哪一期结束爬取（例：2020年第58期：输入2020058）\n")
+        issue_end = input("请输入从哪一期结束爬取（例：2020年第60期：输入2020060）\n")
     issue_start = int(issue_start)
     issue_end = int(issue_end) + 1
+    starttime = datetime.datetime.now()
     print('开始下载，请稍候。。。。。。')
     task_list = []
     init_data = {}
@@ -75,7 +75,7 @@ if __name__ == '__main__':
             task_list.append(task)
         for res in as_completed(task_list):
             init_data.update(res.result())
-    # pprint(init_data)
+    # print(init_data)
     task_list = []
     with ThreadPoolExecutor(max_workers=16) as executor:
         for key in init_data:
@@ -83,8 +83,8 @@ if __name__ == '__main__':
             task_list.append(task)
         for res in as_completed(task_list):
             print(res.result())
-    endtime = time.time()
-    print('已全部下载完成！请在当前路径下查看！用时：{}'.format(endtime - starttime))
+    endtime = datetime.datetime.now()
+    print('已全部下载完成！请在当前路径下查看！用时：{}秒'.format(int((endtime-starttime).total_seconds())))
     print('Enjoy it')
     print('Powered by 所向披靡\n')
     key = input('按回车键退出\n')
