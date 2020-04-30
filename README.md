@@ -1,4 +1,4 @@
-# fulibuscrawler
+# Fulibuscrawler
 福利吧-福利汇总爬虫  
 ## Run
 安装python3
