@@ -1,5 +1,5 @@
 # Fulibuscrawler
-福利吧-福利汇总爬虫  
+福利吧-福利汇总下载器
 ## Run
 安装python3
 
@@ -14,7 +14,7 @@ pip3 install lxml -i https://pypi.doubanio.com/simple/
 
 输入你要从哪一期开始到哪一期结束，
 
-它会自动创建文件夹并多线程下载福利汇总第一页和第二页的所有图片。
+它会自动创建文件夹并多线程下载福利汇总第一页和第二页的**所有图片**和**热门视频链接**。
 ## Release
 下载打包好的exe文件一键运行
--  [fulibuscrawler_v2.0.exe](https://github.com/wanglu58/fulibuscrawler/releases)
+-  [fulibuscrawler_v3.0.exe](https://github.com/wanglu58/fulibuscrawler/releases)
